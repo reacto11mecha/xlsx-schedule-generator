@@ -1,0 +1,11 @@
+{
+  "name": "xlsx-schedule-generator",
+  "version": "1.0.0",
+  "description": "Generator jadwal pelajaran siap pakai",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ezra Khairan Permana",
+  "license": "MIT"
+}
