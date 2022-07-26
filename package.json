@@ -4,8 +4,11 @@
   "description": "Generator jadwal pelajaran siap pakai",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gen": "node index.js"
   },
   "author": "Ezra Khairan Permana",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
 }
