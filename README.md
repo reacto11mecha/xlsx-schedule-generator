@@ -35,6 +35,13 @@ pnpm install
 
 ### Mengubah Jadwal dan Waktu
 
+Terdapat 4 sheet berbeda di dalam file [`jadwal.xlsx`](jadwal.xlsx), berikut penjelasannya.
+
+- `NormalizeSchedule`: Berisi key dan value `JAM` sebagai penanda jam pelajaran ke berapa, dan pasangan nama kelas beserta ID mata pelajaran yang terdapat pada sheet `LessonIds`.
+- `LessonIds`: Berisikan tentang kumpulan ID guru beserta mata pelajaran yang dia ajar.
+- `TimeAllocation`: Berisikan alokasi waktu belajar yang memiliki pasangan `JAM` sebagai penanda jam pelajaran ke berapa, dan waktu mulai dan selesai jam pada hari itu.
+- `Timezone`: Berisikan satu baris informasi zona waktu jadwal pelajaran ini berada.
+
 ### Menjalankan Generator
 
 Setelah mengubah apa yang ada di file excel, jalankan generator dengan script di bawah ini.
