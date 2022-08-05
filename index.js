@@ -81,7 +81,9 @@ function writeTimeAllocation() {
   dataTimeAllocation.forEach((element, idx) => {
     if (idx === 0) {
       secondTemp = { alloc: [element], currentDay };
-    } else if (idx !== 0 && element.JAM < dataTimeAllocation[idx + 1]?.JAM) {
+    } else if (element.JAM === "isBreak") {
+      secondTemp.alloc.push({ isBreak: true, WAKTU: element.WAKTU })
+    } else if (idx !== 0 && element.JAM < dataTimeAllocation[idx + 1]?.JAM || dataTimeAllocation[idx + 1]?.JAM === "isBreak") {
       secondTemp.alloc.push(element);
     } else {
       currentDay++;
