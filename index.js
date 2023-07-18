@@ -26,7 +26,6 @@ if (!fs.existsSync(resultDir)) fs.mkdirSync(resultDir);
 
 function writeSchedule() {
   let currentDay = 1;
-  let currentIndex = 0;
 
   let temp = [];
   let secondTemp = { entity: null };
@@ -60,7 +59,10 @@ function writeSchedule() {
         const lesson = dataLessonIds.find(
           (lesson) => lesson.GURU === dat[className]
         );
-        return lesson["MATA PELAJARAN"];
+
+        if (lesson) return lesson["MATA PELAJARAN"];
+
+        return "";
       }),
     })),
   }));
@@ -73,7 +75,6 @@ function writeSchedule() {
 
 function writeTimeAllocation() {
   let currentDay = 1;
-  let currentIndex = 0;
 
   let temp = [];
   let secondTemp = { alloc: null };
@@ -82,8 +83,11 @@ function writeTimeAllocation() {
     if (idx === 0) {
       secondTemp = { alloc: [element], currentDay };
     } else if (element.JAM === "isBreak") {
-      secondTemp.alloc.push({ isBreak: true, WAKTU: element.WAKTU })
-    } else if (idx !== 0 && element.JAM < dataTimeAllocation[idx + 1]?.JAM || dataTimeAllocation[idx + 1]?.JAM === "isBreak") {
+      secondTemp.alloc.push({ isBreak: true, WAKTU: element.WAKTU });
+    } else if (
+      (idx !== 0 && element.JAM < dataTimeAllocation[idx + 1]?.JAM) ||
+      dataTimeAllocation[idx + 1]?.JAM === "isBreak"
+    ) {
       secondTemp.alloc.push(element);
     } else {
       currentDay++;
@@ -106,8 +110,8 @@ function writeTimeAllocation() {
 
   const result = {
     TimeAllocation: remap,
-    TZ
-  }
+    TZ,
+  };
 
   fs.writeFileSync(
     path.join(resultDir, "waktu.json"),
