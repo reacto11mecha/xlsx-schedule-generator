@@ -51,18 +51,17 @@ function writeSchedule() {
 
   const remap = classess.map((className) => ({
     className,
-    schedule: temp.map((t) => ({
+    schedules: temp.map((t) => ({
       day: t.currentDay,
       lessons: t.entity.map((dat) => {
-        if (typeof dat[className] === "string") return dat[className];
+        if (typeof dat[className] === "string")
+          return { lesson: dat[className] };
 
         const lesson = dataLessonIds.find(
-          (lesson) => lesson.GURU === dat[className]
+          (lesson) => lesson.NO === dat[className]
         );
 
-        if (lesson) return lesson["MATA PELAJARAN"];
-
-        return "";
+        return { lesson: lesson["MAPEL"], name: lesson["NAMA GURU"] };
       }),
     })),
   }));
