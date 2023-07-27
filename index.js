@@ -24,7 +24,7 @@ const resultDir = path.join(__dirname, "result");
 
 if (!fs.existsSync(resultDir)) fs.mkdirSync(resultDir);
 
-function writeSchedule() {
+function writeScheduleStudent() {
   let currentDay = 1;
 
   let temp = [];
@@ -67,8 +67,82 @@ function writeSchedule() {
   }));
 
   fs.writeFileSync(
-    path.join(resultDir, "jadwal.json"),
+    path.join(resultDir, "jadwal-siswa.json"),
     JSON.stringify(remap, null, 2)
+  );
+}
+
+function writeScheduleTeacher() {
+  const data = dataLessonIds
+    .filter(({ MAPEL }) => MAPEL !== "KEPSEK")
+    .map((lessonId) => {
+      const findByIdMap = dataSchedule.map((schedule) => {
+        const reconditionKeys = Object.keys(schedule);
+        const reconditionValues = Object.values(schedule);
+
+        const classIndex = reconditionValues.findIndex(
+          (no) => no === lessonId.NO
+        );
+
+        const className =
+          classIndex > 0 ? reconditionKeys[classIndex] : "TIDAK MENGAJAR";
+
+        return {
+          time: schedule.JAM,
+          className,
+        };
+      });
+
+      return {
+        allocation: findByIdMap,
+        teacherName: lessonId["NAMA GURU"],
+      };
+    })
+    .map(({ allocation, teacherName }) => {
+      let currentDay = 1;
+      let idxAlloc = 0;
+
+      let temp = [];
+      let secondTemp = { alloc: null };
+
+      dataTimeAllocation.forEach((element, idx) => {
+        if (idxAlloc === 0) {
+          secondTemp = {
+            alloc: [{ kelas: allocation[0].className }],
+            currentDay,
+          };
+
+          idxAlloc++;
+        } else if (element.JAM === "isBreak") {
+          secondTemp.alloc.push({ isBreak: true });
+        } else if (
+          (idx !== 0 && element.JAM < dataTimeAllocation[idx + 1]?.JAM) ||
+          dataTimeAllocation[idx + 1]?.JAM === "isBreak"
+        ) {
+          secondTemp.alloc.push({ kelas: allocation[idxAlloc].className });
+
+          idxAlloc++;
+        } else {
+          currentDay++;
+
+          secondTemp.alloc.push({ kelas: allocation[idxAlloc].className });
+          temp.push(secondTemp);
+
+          secondTemp = { alloc: [], currentDay };
+
+          idxAlloc++;
+        }
+      });
+
+      return {
+        teacherName,
+        className: temp,
+      };
+    });
+
+  fs.writeFileSync(
+    path.join(resultDir, "jadwal-guru.json"),
+    JSON.stringify(data, null, 2)
   );
 }
 
@@ -118,5 +192,6 @@ function writeTimeAllocation() {
   );
 }
 
-writeSchedule();
+writeScheduleStudent();
+writeScheduleTeacher();
 writeTimeAllocation();
