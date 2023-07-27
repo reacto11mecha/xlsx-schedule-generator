@@ -94,11 +94,12 @@ function writeScheduleTeacher() {
       });
 
       return {
+        teacherId: lessonId.NO,
         allocation: findByIdMap,
         teacherName: lessonId["NAMA GURU"],
       };
     })
-    .map(({ allocation, teacherName }) => {
+    .map(({ allocation, teacherName, teacherId }) => {
       let currentDay = 1;
       let idxAlloc = 0;
 
@@ -135,6 +136,7 @@ function writeScheduleTeacher() {
       });
 
       return {
+        teacherId,
         teacherName,
         className: temp,
       };
