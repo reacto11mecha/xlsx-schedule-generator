@@ -77,15 +77,16 @@ function writeScheduleTeacher() {
     .filter(({ MAPEL }) => MAPEL !== "KEPSEK")
     .map((lessonId) => {
       const findByIdMap = dataSchedule.map((schedule) => {
-        const reconditionKeys = Object.keys(schedule);
-        const reconditionValues = Object.values(schedule);
+        const { JAM, ...actualSchedule } = schedule;
+
+        const reconditionKeys = Object.keys(actualSchedule);
+        const reconditionValues = Object.values(actualSchedule);
 
         const classIndex = reconditionValues.findIndex(
           (no) => no === lessonId.NO
         );
 
-        const className =
-          classIndex > 0 ? reconditionKeys[classIndex] : "TIDAK MENGAJAR";
+        const className = reconditionKeys[classIndex] ?? "TIDAK MENGAJAR";
 
         return {
           time: schedule.JAM,
